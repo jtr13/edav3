@@ -1,31 +1,39 @@
 project:
   type: book
-  output-dir: docs
-
-execute:
-  echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
-  author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+  title: "EDAV"
+  author: "Joyce Robbins"
   date: today
-  page-footer:
-    right: |
-      This book was built with <a href="https://quarto.org/">Quarto</a>.
-  repo-actions: [edit, issue]
+  site-url: https://jtr13.github.io/edav3
+  repo-url: https://github.com/jtr13/edav3
+  repo-branch: main
+  repo-actions: [source, edit, issue]
   chapters:
     - index.qmd
-    - data.qmd
-    - results.qmd
-    - d3graph.qmd
-    - conclusion.qmd
+
+bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
-    code-fold: true
+    theme: [default, style/graphs.scss]
+    code-link: true
+    highlight-style: style/joyce.theme
+    callout-icon: false
+    fig-width: 4
+    fig-height: 3
+    
+knitr:
+  opts_chunk: 
+    fig.align: center
+    out.width: 50%
+    
+    
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: true
+  cache: false
 
-
+editor: source
