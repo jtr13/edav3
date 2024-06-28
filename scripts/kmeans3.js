@@ -6,7 +6,7 @@ function setup() {
     .append("input")
     .attr("type", "button")
     .attr("value", "Done adding points")
-    .attr("onclick", "begin()");
+    .attr("onclick", "kmeansbegin()");
 
   svg = d3.select("div#plot")
     .append("svg")
@@ -71,9 +71,9 @@ svg.on("click", function(event) {
 }
 
 
-// ############ BEGIN ###############
+// ############ KMEANSBEGIN ###############
 
-function begin() {
+function kmeansbegin() {
   action = "done";
 
   d3.select("h3#info").text("Click button to add initial centroids.")
