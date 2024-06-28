@@ -10,21 +10,21 @@
     ]
   },
   {
-    "objectID": "clustering.html",
-    "href": "clustering.html",
+    "objectID": "clustering3.html",
+    "href": "clustering3.html",
     "title": "2  Clustering",
     "section": "",
-    "text": "2.1 kmeans\n&lt;button type=“button” onclick=“reassign_points()&gt;Reassign points",
+    "text": "2.1 Kmeans",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering</span>"
     ]
   },
   {
-    "objectID": "clustering.html#kmeans",
-    "href": "clustering.html#kmeans",
+    "objectID": "clustering3.html#kmeans",
+    "href": "clustering3.html#kmeans",
     "title": "2  Clustering",
     "section": "",
-    "text": "Seven Points\n\n\n\n\n\nUpdate centroids",
+    "text": "Click anywhere to add points",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering</span>"
     ]
