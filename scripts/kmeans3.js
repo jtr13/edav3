@@ -78,7 +78,7 @@ function kmeansbegin() {
 
   d3.select("h3#info").text("Click button to add initial centroids.")
 
-  d3.select("input")
+  d3.select("div#buttons").select("input")
     .attr("value", "Add centroids")
     .attr("onclick", "update_centroids()");
 
