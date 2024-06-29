@@ -152,7 +152,7 @@ function update_centroids() {
 		  	     .attr("fill-opacity", ".15");
 			});
 
-	d3.select("input")
+	d3.select("div#buttons").select("input")
     .attr("value", "Reassign points")
     .attr("onclick", "reassign_points()");
 
@@ -189,7 +189,7 @@ function reassign_points() {
 		  .data(data)
 			.style("fill", d => colorScale(d.cluster))
 
-	 d3.select("input")
+	 d3.select("div#buttons").select("input")
      .attr("value", "Update centroids")
      .attr("onclick", "update_centroids()");
 
