@@ -2,13 +2,22 @@
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="scripts/kmeans4.js"></script>
 
+
+
 ## Kmeans
 
-<div style="padding-left: 20px;" id="plot">
-  <h3 id="info">Click anywhere to add points</h3>
-</div>
-<div id="buttons" style="padding-left: 70px;">
-</div>  
+<h3 id="info">Click anywhere to add points</h3>
+
+<table>
+  <tr style="vertical-align:top">
+    <td>
+      <div style="padding-left: 20px;" id="plot"></div>
+    </td>
+    <td>
+      <div style="padding-left: 20px;" id="buttons"></div>
+    </td>
+  </tr>  
+</table>
 
 <script>
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
