@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EDAV - 4&nbsp; Clustering 3</title>
+<title>EDAV - 3&nbsp; Clustering 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./clustering4.html" rel="next">
-<link href="./clustering2.html" rel="prev">
+<link href="./clustering3.html" rel="next">
+<link href="./clustering1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./clustering3.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Clustering 3</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./clustering2.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Clustering 2</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -123,13 +123,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./clustering2.html" class="sidebar-item-text sidebar-link">
+  <a href="./clustering2.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Clustering 2</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./clustering3.html" class="sidebar-item-text sidebar-link active">
+  <a href="./clustering3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Clustering 3</span></span></a>
   </div>
 </li>
@@ -149,16 +149,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#kmeans" id="toc-kmeans" class="nav-link active" data-scroll-target="#kmeans"><span class="header-section-number">4.1</span> Kmeans</a></li>
+  <li><a href="#kmeans" id="toc-kmeans" class="nav-link active" data-scroll-target="#kmeans"><span class="header-section-number">3.1</span> Kmeans</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/jtr13/edav3/blob/main/clustering3.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/jtr13/edav3/edit/main/clustering3.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/jtr13/edav3/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/jtr13/edav3/blob/main/clustering2.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/jtr13/edav3/edit/main/clustering2.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/jtr13/edav3/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Clustering 3</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Clustering 2</span></h1>
 </div>
 
 
@@ -176,17 +176,24 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="scripts/kmeans3.js"></script>
-<section id="kmeans" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="kmeans"><span class="header-section-number">4.1</span> Kmeans</h2>
-<div id="plot" style="padding-left: 20px;">
+<script src="scripts/kmeans2.js"></script>
+<section id="kmeans" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="kmeans"><span class="header-section-number">3.1</span> Kmeans</h2>
 <h3 id="info" class="anchored">
 Click anywhere to add points
 </h3>
-</div>
-<div id="buttons">
+<div id="plot" style="padding-left: 20px;">
 
 </div>
+<button type="button" onclick="begin()">
+Done adding points
+</button>
+<button type="button" onclick="update_centroids()">
+Update centroids
+</button>
+<button type="button" onclick="reassign_points()">
+Reassign points
+</button>
 <script>
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -644,13 +651,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./clustering2.html" class="pagination-link" aria-label="Clustering 2">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Clustering 2</span></span>
+      <a href="./clustering1.html" class="pagination-link" aria-label="Clustering 1">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Clustering 1</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./clustering4.html" class="pagination-link" aria-label="Clustering 4">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Clustering 4</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./clustering3.html" class="pagination-link" aria-label="Clustering 3">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Clustering 3</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -659,4 +666,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/jtr13/edav3/blob/main/clustering3.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/jtr13/edav3/edit/main/clustering3.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/jtr13/edav3/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/jtr13/edav3/blob/main/clustering2.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/jtr13/edav3/edit/main/clustering2.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/jtr13/edav3/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

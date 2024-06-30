@@ -10,23 +10,83 @@
     ]
   },
   {
+    "objectID": "clustering1.html",
+    "href": "clustering1.html",
+    "title": "2  Clustering 1",
+    "section": "",
+    "text": "2.1 Kmeans: Seven points",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering 1</span>"
+    ]
+  },
+  {
+    "objectID": "clustering1.html#kmeans-seven-points",
+    "href": "clustering1.html#kmeans-seven-points",
+    "title": "2  Clustering 1",
+    "section": "",
+    "text": "Update centroids\n\n\nReassign points",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering 1</span>"
+    ]
+  },
+  {
+    "objectID": "clustering2.html",
+    "href": "clustering2.html",
+    "title": "3  Clustering 2",
+    "section": "",
+    "text": "3.1 Kmeans",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Clustering 2</span>"
+    ]
+  },
+  {
+    "objectID": "clustering2.html#kmeans",
+    "href": "clustering2.html#kmeans",
+    "title": "3  Clustering 2",
+    "section": "",
+    "text": "Click anywhere to add points\n\n\n\n\n\nDone adding points\n\n\nUpdate centroids\n\n\nReassign points",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Clustering 2</span>"
+    ]
+  },
+  {
     "objectID": "clustering3.html",
     "href": "clustering3.html",
-    "title": "2  Clustering",
+    "title": "4  Clustering 3",
     "section": "",
-    "text": "2.1 Kmeans",
+    "text": "4.1 Kmeans",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Clustering 3</span>"
     ]
   },
   {
     "objectID": "clustering3.html#kmeans",
     "href": "clustering3.html#kmeans",
-    "title": "2  Clustering",
+    "title": "4  Clustering 3",
     "section": "",
     "text": "Click anywhere to add points",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Clustering 3</span>"
+    ]
+  },
+  {
+    "objectID": "clustering4.html",
+    "href": "clustering4.html",
+    "title": "5  Clustering 4",
+    "section": "",
+    "text": "5.1 Kmeans",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Clustering 4</span>"
+    ]
+  },
+  {
+    "objectID": "clustering4.html#kmeans",
+    "href": "clustering4.html#kmeans",
+    "title": "5  Clustering 4",
+    "section": "",
+    "text": "Click anywhere to add points",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Clustering 4</span>"
     ]
   }
 ]
