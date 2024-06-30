@@ -156,36 +156,30 @@ function update_centroids() {
 
   const k = d3.select("svg").datum();
 
-  centroids = d3.range(k).map(e =>
+  const oldcentroids = svg
+    .select("#centroids")
+    .selectAll("circle")
+	  .data()
+
+  const centroids = d3.range(k).map(e =>
     ({x: d3.mean(data.filter(d => d.cluster == e).map(d => d.x)),
       y: d3.mean(data.filter(d => d.cluster == e).map(d => d.y)),
       cluster: e}));
 
 
+
+
+
+// update centroids
   svg.select("#centroids").selectAll("circle")
 	  .data(centroids)
 		  .transition()
 		  .duration(1000)
 		  .attr("r", "6")
 			.attr("cx", d => xScale(d.x))
-			.attr("cy", d => yScale(d.y))
-			.on("end", function() {
-			   svg.select("#plotarea")
-           .append("g")
-           .attr("class", "oldcentroids")
-           .selectAll("circle")
-           .data(centroids)
-           .enter()
-           .append("circle")
-		         .attr("cx", d => xScale(d.x))
-			       .attr("cy", d => yScale(d.y))
-		  	     .attr("r", "4")
-			       .attr("stroke", d => colorScale(d.cluster))
-		  	     .style("fill", d => colorScale(d.cluster))
-		  	     .attr("fill-opacity", ".15");
-			});
+			.attr("cy", d => yScale(d.y));
 
-	d3.select("div#buttons").select("input")
+  d3.select("div#buttons").select("input")
     .attr("value", "Reassign points")
     .attr("onclick", "reassign_points()");
 
@@ -203,20 +197,23 @@ function dist(w, z) {
 // source: https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
 function reassign_points() {
 
-     d3.select("h3#info").text("Click button to recalcuate centroids based on new points.")
+  d3.select("h3#info").text("Click button to recalcuate centroids based on new points.")
 
-    for(let j = 0; j < data.length; j++){
-        let ibest = 0;
-        let dbest = Infinity;
-        for(let i = 0; i < centroids.length; i++) {
-            let d = dist(data[j], centroids[i]);
-            if(d < dbest) {
-                dbest = d;
-                ibest = i;
-            }
+  const centroids = d3.select("#centroids")
+    .selectAll("circle").data();
+
+  for(let j = 0; j < data.length; j++){
+    let ibest = 0;
+    let dbest = Infinity;
+    for(let i = 0; i < centroids.length; i++) {
+        const d = dist(data[j], centroids[i]);
+        if(d < dbest) {
+          dbest = d;
+          ibest = i;
         }
-        data[j].cluster = ibest;
     }
+    data[j].cluster = ibest;
+  }
 
     svg.selectAll("circle")
 		  .data(data)
