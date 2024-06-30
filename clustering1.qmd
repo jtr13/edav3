@@ -1,4 +1,4 @@
-# Clustering
+# Clustering 1
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="scripts/kmeans.js"></script>
 

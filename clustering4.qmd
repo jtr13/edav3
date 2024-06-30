@@ -1,16 +1,14 @@
-# Clustering 2
+# Clustering 4
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="scripts/kmeans2.js"></script>
+<script src="scripts/kmeans4.js"></script>
 
 ## Kmeans
 
-<h3 id="info">Click anywhere to add points</h1>
-<div style="padding-left: 20px;" id="plot"></div>
-
-<button type="button" onclick="begin()">Done adding points</button>
-<button type="button" onclick="update_centroids()">Update centroids</button>
-<button type="button" onclick="reassign_points()">Reassign points</button>
-
+<div style="padding-left: 20px;" id="plot">
+  <h3 id="info">Click anywhere to add points</h3>
+</div>
+<div id="buttons" style="padding-left: 70px;">
+</div>  
 
 <script>
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -47,9 +45,6 @@
   
   let action = "add";
   
-  const k = 2;
-  
   setup();
-  
   
 </script> 
