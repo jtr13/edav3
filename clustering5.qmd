@@ -6,7 +6,7 @@
 
 ## Kmeans
 
-<h3 id="info">Click anywhere to add points</h3>
+<h3 id="info">Click and drag to add points</h3>
 
 <table>
   <tr style="vertical-align:top">
