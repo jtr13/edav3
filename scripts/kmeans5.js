@@ -53,6 +53,8 @@ function setup() {
 
 // create data
 
+// https://stackoverflow.com/questions/18273884/live-drawing-of-a-line-in-d3-js
+
 svg.on("mousedown", mousedown)
   .on("mouseup", mouseup);
 
