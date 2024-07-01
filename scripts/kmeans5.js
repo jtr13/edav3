@@ -53,18 +53,37 @@ function setup() {
 
 // create data
 
-svg.on("click", function(event) {
-    if (action == "add") {
-	// add a point
-	  const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
+svg.on("mousedown", mousedown)
+  .on("mouseup", mouseup);
+
+function mousedown() {
+    const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
 	  const new_y = yScale.invert(d3.pointer(event)[1] - `${margin.top}`);
-	  svg.select("#plotarea").append("circle")
-    .data([{x: new_x, y: new_y}])
-      .attr("cx", d => xScale(d.x))
-      .attr("cy", d => yScale(d.y))
-      .attr("r", "3");
-    }
-  });
+    svg.select("#plotarea")
+      .append("circle")
+        .data([{x: new_x, y: new_y}])
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", "3");
+
+    svg.on("mousemove", mousemove);
+}
+
+function mousemove() {
+    const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
+	  const new_y = yScale.invert(d3.pointer(event)[1] - `${margin.top}`);
+    svg.select("#plotarea")
+      .append("circle")
+        .data([{x: new_x, y: new_y}])
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", "3");
+}
+
+function mouseup() {
+    svg.on("mousemove", null);
+}
+
 
 }
 
@@ -123,8 +142,7 @@ function kmeansbegin() {
   allpoints.data(data);
 
   allpoints
-    .style("fill", d => colorScale(d.cluster))
-    .attr("fill-opacity", ".5");
+    .style("fill", d => colorScale(d.cluster));
 
     // draw initial centroids
 
@@ -135,16 +153,15 @@ function kmeansbegin() {
 
   svg.select("g#plotarea")
     .append("g")
-    .attr("id", "centroids")
-    .selectAll("circle")
-    .data(centroids)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xScale(d.x))
-    .attr("cy", d => yScale(d.y))
-    .attr("r", "0")
-    .style("fill", d => colorScale(d.cluster))
-    .attr("fill-opacity", ".5");
+      .attr("id", "centroids")
+      .selectAll("circle")
+      .data(centroids)
+      .enter()
+      .append("circle")
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", "0")
+        .style("fill", d => colorScale(d.cluster));
 }
 
 
@@ -166,7 +183,9 @@ function update_centroids() {
       y: d3.mean(data.filter(d => d.cluster == e).map(d => d.y)),
       cluster: e}));
 
+  let done = false;
 
+  for(let i = 0; i < centroids.length; i++) {}
 
 
 
