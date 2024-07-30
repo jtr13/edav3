@@ -32,7 +32,7 @@ function setup() {
     .attr("x", innerWidth/2)
     .attr("y", innerHeight + .75 * margin.bottom)
     .attr("text-anchor", "middle")
-    .text("v1");
+    .text("x");
 
 // create y-axis
   svg.select("g#plotarea")
@@ -48,7 +48,7 @@ function setup() {
     .attr("y", innerHeight/2)
     .attr("text-anchor", "middle")
     .attr("transform", "rotate (-90, " + (0 - .75 * margin.left) + "," + innerHeight/2 + ")" )
-    .text("v2");
+    .text("y");
 
 
 // create data
@@ -57,6 +57,8 @@ function setup() {
 
 svg.on("mousedown", mousedown)
   .on("mouseup", mouseup);
+
+// ############ MOUSEDOWN ###############
 
 function mousedown() {
     const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
@@ -71,6 +73,8 @@ function mousedown() {
     svg.on("mousemove", mousemove);
 }
 
+// ############ MOUSEMOVE ###############
+
 function mousemove() {
     const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
 	  const new_y = yScale.invert(d3.pointer(event)[1] - `${margin.top}`);
@@ -82,12 +86,16 @@ function mousemove() {
         .attr("r", "3");
 }
 
+// ############ MOUSEUP ###############
+
 function mouseup() {
     svg.on("mousemove", null);
 }
 
 
 }
+
+
 
 // ############ CHOOSEK ###############
 
@@ -247,3 +255,18 @@ function reassign_points() {
 
 };
 
+// ############ DOWNLOADSVG ###############
+// need to add styling
+
+function downloadSVG() {
+  const svgData = new XMLSerializer().serializeToString(document.querySelector("div#plot > svg"));
+  const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "chart.svg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
