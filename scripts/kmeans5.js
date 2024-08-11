@@ -2,6 +2,10 @@
 
 function setup() {
 
+  d3.select("h3#info").text("Click and drag to add points.")
+  d3.select("div#plot").select("svg").remove();
+  d3.select("div#buttons").select("input").remove();
+
   d3.select("div#buttons")
     .append("input")
     .attr("type", "button")
@@ -90,10 +94,10 @@ function mousemove() {
 
 function mouseup() {
     svg.on("mousemove", null);
-}
+  }
 
 
-}
+} // end of setup()
 
 
 
@@ -101,7 +105,9 @@ function mouseup() {
 
 
 function choosek() {
-  action = "done";
+  svg.on("mousedown", null)
+    .on("mouseup", null)
+    .on("mousemove", null);
 
   d3.select("h3#info").text("Choose the number of clusters")
 
@@ -135,26 +141,26 @@ function choosek() {
 
 function kmeansbegin() {
 
-  d3.select("div#buttons").select("select").remove();
+  d3.select("div#buttons").select("select#k").remove();
 
   d3.select("div#buttons").append("input")
     .attr("value", "Add centroids")
     .attr("type", "button")
     .attr("onclick", "update_centroids()");
 
-  const allpoints = svg.selectAll("circle")
+  const allpoints = svg.selectAll("circle");
+
   data = allpoints.data();
 
   const k = d3.select("svg").datum();
 
   data = data.map(d => ({x: d.x, y: d.y, cluster: d3.randomInt(k)()}));
 
-  allpoints.data(data);
-
   allpoints
+    .data(data) // updates with cluster info
     .style("fill", d => colorScale(d.cluster));
 
-    // draw initial centroids
+    // draw initial centroids (with no area)
 
   let centroids = d3.range(k).map(e =>
     ({x: d3.mean(data.filter(d => d.cluster == e).map(d => d.x)),
@@ -183,36 +189,46 @@ function update_centroids() {
 
   const k = d3.select("svg").datum();
 
-  const oldcentroids = svg
-    .select("#centroids")
-    .selectAll("circle")
-	  .data()
-
   const centroids = d3.range(k).map(e =>
     ({x: d3.mean(data.filter(d => d.cluster == e).map(d => d.x)),
       y: d3.mean(data.filter(d => d.cluster == e).map(d => d.y)),
       cluster: e}));
-
   let done = false;
 
-  for(let i = 0; i < centroids.length; i++) {}
+  if (d3.select("g#centroids circle").attr("r") != 0) {
+    done = true;
+    const oldcentroids = svg
+      .select("#centroids")
+      .selectAll("circle")
+	    .data();
 
+    for (let i = 0; i < centroids.length; i++) {
+      if (oldcentroids[i].x != centroids[i].x) done = false;
+      if (oldcentroids[i].y != centroids[i].y) done = false;
+    }
+  };
 
+  if (done) {
+    d3.select("h3#info").text("Algorithm converged. Click to restart.");
+    d3.select("div#buttons").select("input")
+      .attr("value", "Restart")
+      .attr("onclick", "setup()");
+  } else {
+    // update centroids
+    svg.select("#centroids").selectAll("circle")
+	    .data(centroids)
+		    .transition()
+		    .duration(1000)
+		    .attr("r", "6")
+			  .attr("cx", d => xScale(d.x))
+			  .attr("cy", d => yScale(d.y));
 
-// update centroids
-  svg.select("#centroids").selectAll("circle")
-	  .data(centroids)
-		  .transition()
-		  .duration(1000)
-		  .attr("r", "6")
-			.attr("cx", d => xScale(d.x))
-			.attr("cy", d => yScale(d.y));
+    d3.select("div#buttons").select("input")
+      .attr("value", "Reassign points")
+      .attr("onclick", "reassign_points()");
+  };
 
-  d3.select("div#buttons").select("input")
-    .attr("value", "Reassign points")
-    .attr("onclick", "reassign_points()");
-
-}
+};
 
 // source: https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
 
@@ -254,6 +270,14 @@ function reassign_points() {
 
 
 };
+
+// FINISHED
+
+function converged() {
+
+
+};
+
 
 // ############ DOWNLOADSVG ###############
 // need to add styling

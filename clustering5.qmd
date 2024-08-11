@@ -1,10 +1,10 @@
-# Clustering
-<script src="https://d3js.org/d3.v7.min.js"></script>
+# Clustering 5
+<script src="d3.v7.js"></script>
 <script src="scripts/kmeans5.js"></script>
 
 ## Kmeans
 
-<h3 id="info">Click and drag to add points</h3>
+<h3 id="info"></h3>
 
 <table>
   <tr style="vertical-align:top">
@@ -54,8 +54,6 @@
   let svg;
   
   let data;
-  
-  let action = "add";
   
   setup();
   
