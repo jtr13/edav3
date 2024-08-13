@@ -2,6 +2,10 @@
 
 function setup() {
 
+  d3.select("h3#info").text("Click and drag to add points.")
+  d3.select("div#plot").select("svg").remove();
+  d3.select("div#buttons").select("input").remove();
+
   d3.select("div#buttons")
     .append("input")
     .attr("type", "button")
@@ -17,6 +21,12 @@ function setup() {
   svg.append("g")
     .attr("id", "plotarea")
     .attr("transform", `translate( ${margin.left}, ${margin.top} )`)
+
+  svg.select("g#plotarea")
+    .append("rect")
+    .attr("width", innerWidth)
+    .attr("height", innerHeight)
+    .attr("fill", "transparent");
 
 // create x-axis
   svg.select("g#plotarea")
@@ -55,45 +65,56 @@ function setup() {
 
 // https://stackoverflow.com/questions/18273884/live-drawing-of-a-line-in-d3-js
 
-svg.on("mousedown", mousedown)
+svg.select("g#plotarea")
+  .select("rect")
+  .on("mousedown", mousedown)
   .on("mouseup", mouseup);
+
+// Throttle function to limit the rate at which the mousemove function is called, see: https://stackoverflow.com/questions/78859948/how-can-i-slow-down-drag-behavior-with-d3-javascript
+
+function throttle(func, delay) {
+  let lastCall = 0;
+  return function(...args) {
+    const now = new Date().getTime();
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      return func(...args);
+    }
+  };
+}
+
+function addpoint() {
+    const new_x = xScale.invert(d3.pointer(event)[0]);
+	  const new_y = yScale.invert(d3.pointer(event)[1]);
+    svg.select("g#plotarea")
+      .append("circle")
+        .data([{x: new_x, y: new_y}])
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", "3");
+};
+
+
 
 // ############ MOUSEDOWN ###############
 
 function mousedown() {
-    const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
-	  const new_y = yScale.invert(d3.pointer(event)[1] - `${margin.top}`);
-    svg.select("#plotarea")
-      .append("circle")
-        .data([{x: new_x, y: new_y}])
-        .attr("cx", d => xScale(d.x))
-        .attr("cy", d => yScale(d.y))
-        .attr("r", "3");
-
-    svg.on("mousemove", mousemove);
-}
-
-// ############ MOUSEMOVE ###############
-
-function mousemove() {
-    const new_x = xScale.invert(d3.pointer(event)[0] - `${margin.left}`);
-	  const new_y = yScale.invert(d3.pointer(event)[1] - `${margin.top}`);
-    svg.select("#plotarea")
-      .append("circle")
-        .data([{x: new_x, y: new_y}])
-        .attr("cx", d => xScale(d.x))
-        .attr("cy", d => yScale(d.y))
-        .attr("r", "3");
+    throttle(addpoint, 50);
+    svg.select("g#plotarea")
+      .select("rect")
+      .on("mousemove", throttle(addpoint, 50));
 }
 
 // ############ MOUSEUP ###############
 
 function mouseup() {
-    svg.on("mousemove", null);
-}
+    svg.select("g#plotarea")
+      .select("rect")
+      .on("mousemove", null);
+  }
 
 
-}
+} // end of setup()
 
 
 
@@ -101,11 +122,16 @@ function mouseup() {
 
 
 function choosek() {
-  action = "done";
+  svg.select("g#plotarea")
+    .on("mousedown", null)
+    .on("mouseup", null)
+    .on("mousemove", null);
 
   d3.select("h3#info").text("Choose the number of clusters")
 
-  d3.select("div#buttons").select("input").remove();
+  d3.select("div#buttons")
+  .select("input")
+  .attr("hidden", "hidden");
 
   const kvalues = d3.range(11);
 
@@ -131,30 +157,39 @@ function choosek() {
       .text(d => d);
 }
 
+// ############ REDO ###############
+
+function redo() {
+  d3.select("#centroids").remove();
+  d3.select("#lines").remove()
+  kmeansbegin();
+}
+
 // ############ KMEANSBEGIN ###############
 
 function kmeansbegin() {
 
-  d3.select("div#buttons").select("select").remove();
+  d3.select("div#buttons").select("select#k").remove();
 
-  d3.select("div#buttons").append("input")
+  d3.select("div#buttons").select("input")
+    .attr("hidden", null)
     .attr("value", "Add centroids")
     .attr("type", "button")
     .attr("onclick", "update_centroids()");
 
-  const allpoints = svg.selectAll("circle")
+  const allpoints = svg.selectAll("circle");
+
   data = allpoints.data();
 
   const k = d3.select("svg").datum();
 
   data = data.map(d => ({x: d.x, y: d.y, cluster: d3.randomInt(k)()}));
 
-  allpoints.data(data);
-
   allpoints
+    .data(data) // updates with cluster info
     .style("fill", d => colorScale(d.cluster));
 
-    // draw initial centroids
+    // draw initial centroids (with no area)
 
   let centroids = d3.range(k).map(e =>
     ({x: d3.mean(data.filter(d => d.cluster == e).map(d => d.x)),
@@ -172,6 +207,11 @@ function kmeansbegin() {
         .attr("cy", d => yScale(d.y))
         .attr("r", "0")
         .style("fill", d => colorScale(d.cluster));
+
+    // create lines group
+    svg.select("g#plotarea")
+      .append("g")
+      .attr("id", "lines");
 }
 
 
@@ -186,7 +226,7 @@ function update_centroids() {
   const oldcentroids = svg
     .select("#centroids")
     .selectAll("circle")
-	  .data()
+    .data();
 
   const centroids = d3.range(k).map(e =>
     ({x: d3.mean(data.filter(d => d.cluster == e).map(d => d.x)),
@@ -195,24 +235,56 @@ function update_centroids() {
 
   let done = false;
 
-  for(let i = 0; i < centroids.length; i++) {}
+  if (d3.select("g#centroids circle").attr("r") != 0) {
+    done = true;
 
+    for (let i = 0; i < centroids.length; i++) {
+      if (oldcentroids[i].x != centroids[i].x) done = false;
+      if (oldcentroids[i].y != centroids[i].y) done = false;
+    }
+  };
 
+  if (done) {
+    d3.select("h3#info").text("Algorithm converged. Click to restart.");
+    d3.select("div#buttons")
+      .select("input")
+      .attr("hidden", "hidden");
+  } else {
 
-// update centroids
-  svg.select("#centroids").selectAll("circle")
-	  .data(centroids)
+    // update centroids
+    svg.select("#centroids")
+      .selectAll("circle")
+	    .data(centroids)
 		  .transition()
 		  .duration(1000)
-		  .attr("r", "6")
-			.attr("cx", d => xScale(d.x))
-			.attr("cy", d => yScale(d.y));
+		    .attr("r", "5")
+		    .attr("cx", d => xScale(d.x))
+			  .attr("cy", d => yScale(d.y));
 
-  d3.select("div#buttons").select("input")
-    .attr("value", "Reassign points")
-    .attr("onclick", "reassign_points()");
+  svg.select("g#plotarea")
+    .select("#lines")
+    .append("g")
+      .selectAll("line")
+      .data(oldcentroids)
+      .enter()
+      .append("line")
+        .attr("x1", d => xScale(d.x))
+        .attr("y1", d => yScale(d.y))
+        .attr("x2", d => xScale(d.x))
+        .attr("y2", d => yScale(d.y))
+        .attr("stroke", d => colorScale(d.cluster))
+      .data(centroids)
+      .transition()
+      .duration(1000)
+        .attr("x2", d => xScale(d.x))
+        .attr("y2", d => yScale(d.y));
 
-}
+    d3.select("div#buttons").select("input")
+      .attr("value", "Reassign points")
+      .attr("onclick", "reassign_points()");
+  };
+
+};
 
 // source: https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
 
@@ -254,6 +326,7 @@ function reassign_points() {
 
 
 };
+
 
 // ############ DOWNLOADSVG ###############
 // need to add styling
