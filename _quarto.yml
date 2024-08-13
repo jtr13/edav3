@@ -15,7 +15,7 @@ book:
 
 format:
   html:
-    theme: [default, style/graphs.scss]
+    theme: [default, style/edav3.scss]
     code-link: true
     highlight-style: style/joyce.theme
     callout-icon: false

@@ -12,6 +12,13 @@ $font-family-sans-serif: "Lato", sans-serif;
 
 /*-- scss:rules --*/
 
+text, circle {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
 p code:not(.sourceCode), td code:not(.sourceCode),
 li code:not(.sourceCode) {
   font-weight: bold;
@@ -34,5 +41,10 @@ div.callout-tip.callout {
 
 div.callout-tip.callout-style-default>.callout-header {
   background-color: $background-color;
+}
+
+button {
+  font-size: .85rem;
+  margin: 10px;
 }
 

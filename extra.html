@@ -1,12 +1,10 @@
-# Clustering 4
+# Clustering 5
 <script src="d3.v7.js"></script>
-<script src="scripts/kmeans4.js"></script>
-
-
+<script src="scripts/kmeans5.js"></script>
 
 ## Kmeans
 
-<h3 id="info">Click anywhere to add points</h3>
+<h3 id="info">Click and drag to add points</h3>
 
 <table>
   <tr style="vertical-align:top">
@@ -19,8 +17,13 @@
   </tr>  
 </table>
 
+<div style="padding-left: 75px;">
+  <button id="download" onclick="downloadSVG()">Download SVG</button>
+</div>  
+
+
 <script>
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+  const colorScale = d3.scaleOrdinal(d3.schemeSet1);
 
   // width and height
   const w = 400;
@@ -51,8 +54,6 @@
   let svg;
   
   let data;
-  
-  let action = "add";
   
   setup();
   
