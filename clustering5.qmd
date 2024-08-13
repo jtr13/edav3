@@ -19,7 +19,9 @@
 
 <div style="padding-left: 75px;">
   <button id="download" onclick="downloadSVG()">Download SVG</button>
-</div>  
+  <button id="redo" onclick="redo()">Redo (same points)</button>
+  <button id="restart" onclick="setup()">Restart</button>
+</div> 
 
 
 <script>
