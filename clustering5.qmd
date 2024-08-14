@@ -1,5 +1,5 @@
 # Clustering 5
-<script src="d3.v7.js"></script>
+<script src="scripts/d3.v7.js"></script>
 <script src="scripts/kmeans5.js"></script>
 
 ## Kmeans
