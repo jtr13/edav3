@@ -5,6 +5,7 @@
 ## Kmeans
 
 <h3 id="info"></h3>
+<p id="kmse"></p>
 
 <table>
   <tr style="vertical-align:top">
