@@ -171,18 +171,22 @@ function redo() {
 function kmeansbegin() {
   d3.select("div#buttons").select("select#k").remove();
 
-  d3.select("div#buttons").select("input")
-    .attr("hidden", null)
-    .attr("value", "Add centroids")
-    .attr("type", "button")
-    .attr("onclick", "update_centroids()");
-
   const allpoints = svg.selectAll("circle");
   data = allpoints.data();
 
   const k = d3.select("svg").datum();
 
   data = data.map(d => ({ x: d.x, y: d.y, cluster: d3.randomInt(k)() }));
+
+  const method = d3.select('input[name="initmethod"]:checked').node().value;
+
+  if (method == "points") {
+
+  d3.select("div#buttons").select("input")
+    .attr("hidden", null)
+    .attr("value", "Add centroids")
+    .attr("type", "button")
+    .attr("onclick", "update_centroids()");
 
   allpoints
     .data(data) // updates with cluster info
@@ -195,7 +199,7 @@ function kmeansbegin() {
     cluster: e
   }));
 
-  svg.select("g#plotarea")
+    svg.select("g#plotarea")
     .append("g")
     .attr("id", "centroids")
     .selectAll("circle")
@@ -207,6 +211,32 @@ function kmeansbegin() {
     .attr("r", "0")
     .style("fill", d => colorScale(d.cluster));
 
+  } else {
+    const indices = d3.shuffle(d3.range(data.length)).slice(0, k);
+    let centroids = data.filter((d, i) => indices.includes(i))
+      .map((d, i) => ({...d, cluster:i})); // add cluster
+
+    svg.select("g#plotarea")
+      .append("g")
+      .attr("id", "centroids")
+      .selectAll("circle")
+      .data(centroids)
+      .enter()
+      .append("circle")
+      .attr("cx", d => xScale(d.x))
+      .attr("cy", d => yScale(d.y))
+      .attr("r", "5")
+      .style("fill", d => colorScale(d.cluster));
+
+  d3.select("div#buttons").select("input")
+    .attr("hidden", null)
+    .attr("value", "Assign points")
+    .attr("type", "button")
+    .attr("onclick", "reassign_points()");
+  }
+
+
+
   // create lines group
   svg.select("g#plotarea")
     .append("g")
@@ -217,7 +247,7 @@ function kmeansbegin() {
 // ############ UPDATE_CENTROIDS ###############
 
 function update_centroids() {
-  d3.select("h3#info").text("Click button to reassign points to the nearest centroid.");
+  d3.select("h3#info").text("Click button to reassign points.");
 
   const k = d3.select("svg").datum();
 
@@ -310,7 +340,7 @@ function distsquared(w, z) {
 
 // source: https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
 function reassign_points() {
-  d3.select("h3#info").text("Click button to recalculate centroids based on new points.");
+  d3.select("h3#info").text("Click button to recalculate centroids.");
 
   const centroids = d3.select("#centroids")
     .selectAll("circle").data();
