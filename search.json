@@ -24,7 +24,7 @@
     "href": "clustering5.html#kmeans",
     "title": "2  Clustering 5",
     "section": "",
-    "text": "Download SVG Redo (same points) Restart",
+    "text": "Initialize centroids by randomizing:\n\npoints centroids\n\n\n\n\n\n\n\n\n\n\nDownload SVG Redo (same points) Restart",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Clustering 5</span>"
     ]
