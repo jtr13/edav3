@@ -4,19 +4,24 @@
 
 ## Kmeans
 
-<h3 id="info"></h3>
-<p id="kmse"></p>
-
 <table>
-  <tr style="vertical-align:top">
+  <tr style="vertical-align: top;">
     <td>
+      <h3 id="info"></h3>
+      <p id="kmse"></p>
       <div style="padding-left: 20px;" id="plot"></div>
     </td>
     <td>
-      <div style="padding-left: 20px;" id="buttons"></div>
+      <div style="height: 30px;"></div>
+      <p>Initialize centroids by randomizing:</p>
+      <input type="radio" name="initmethod" value="points">points</input>
+      <input type="radio" name="initmethod" value="centroids" checked>centroids</input>
+      <div style="height: 30px;"></div>
+      <div id="buttons"></div>
     </td>
   </tr>  
 </table>
+
 
 <div style="padding-left: 75px;">
   <button id="download" onclick="downloadSVG()">Download SVG</button>
