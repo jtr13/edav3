@@ -162,7 +162,7 @@ function choosek() {
 function redo() {
   d3.select("#centroids").remove();
   d3.select("#lines").remove();
-  d3.select("#kmse").text(" ");
+  d3.select("#kmse").text("Kmeans square error:");
   kmeansbegin();
 }
 
@@ -238,7 +238,7 @@ function update_centroids() {
     kmse = kmse + distsquared(data[j], centroids[data[j].cluster]);
   }
 
-  d3.select("#kmse").text("Kmeans square error: " + kmse);
+  d3.select("#kmse").text("Kmeans square error: " + kmse.toFixed(2));
 
   let done = false;
 
