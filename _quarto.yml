@@ -11,7 +11,7 @@ book:
   repo-actions: [source, edit, issue]
   chapters:
     - index.qmd
-    - clustering5.qmd
+    - clustering.qmd
 
 format:
   html:
