@@ -96,6 +96,7 @@ function addpoint() {
     .data([{ x: new_x, y: new_y }])
     .attr("cx", d => xScale(d.x))
     .attr("cy", d => yScale(d.y))
+    .attr("fill-opacity", "0.5")
     .attr("r", "3");
 }
 
@@ -268,7 +269,7 @@ function update_centroids() {
     kmse = kmse + distsquared(data[j], centroids[data[j].cluster]);
   }
 
-  d3.select("#kmse").text("Kmeans square error: " + kmse.toFixed(2));
+  d3.select("#kmse").text("Kmeans square error: " + kmse.toFixed(5));
 
   let done = false;
 
@@ -378,6 +379,25 @@ function downloadSVG() {
   const a = document.createElement("a");
   a.href = url;
   a.download = "chart.svg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+
+// ########### DOWNLOAD SVG ################
+
+// https://observablehq.com/@jeremiak/download-data-button
+// converted to non-obvervable javascript with chatgpt
+
+function savedata() {
+  const data = d3.selectAll("#plotarea > circle").data();
+  const blob = new Blob([d3.csvFormat(data)], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "data.csv";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
