@@ -1,0 +1,69 @@
+# Stability
+
+## Bagclust method (clue)
+
+```{r}
+library(ggplot2)
+library(clue)
+```
+
+
+```{r}
+data <- read.csv("data/fourclust.csv")
+data$cluster <- data$cluster + 1
+ggplot(data, aes(x, y, color = factor(cluster))) +
+  geom_point() +
+  guides(color = "none")
+
+```
+
+
+```{r}
+
+party <- cl_bag(data[,1:2], 2, 4)
+data$class <- factor(as.integer(cl_class_ids(party)))
+data$stab <- apply(party$.Data, 1, max)
+data$label <- rownames(data)
+
+ggplot(data, aes(x, y, color = class, alpha = stab, label = label)) +
+  geom_point() +
+  geom_text(aes(x = x+.05, y = y+.05), size = 2) +
+  theme_bw() +
+  scale_alpha(range = c(.2, 1))
+
+
+```
+
+
+```{r}
+km <- kmeans(data[,1:2], 4, algorithm = "Forgy")
+
+m <- matchClasses(table(km$cluster, data$cluster))
+data$newclust <- unname(m[km$cluster])
+ggplot(data, aes(x, y, color = factor(cluster))) +
+  geom_point() +
+  geom_point(aes(color = factor(newclust)), pch = 21, size = 4)
+
+```
+
+```{r}
+library(factoextra)
+fviz_cluster(km, data[,1:2])
+```
+
+
+
+```{r}
+km <- function(n) {
+  data <- read.csv("data/fourclust.csv")
+  km <- kmeans(data[,1:2], 4, iter.max = 100, algorithm = "Forgy")
+  return(sum(km$withinss))
+}
+```
+
+
+
+```{r, echo=FALSE}
+# Resources
+# https://www.tidymodels.org/learn/statistics/k-means/
+```

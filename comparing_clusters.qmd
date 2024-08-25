@@ -1,0 +1,297 @@
+# Clustering comparisons
+
+## `e1071::classAgreement()`
+
+In this example we will compare two clusterings:
+
+```{r}
+library(tidyverse)
+df <- read.csv("data/ninepts.csv")
+df$label <- rownames(df)
+```
+
+```{r}
+#| layout-ncol: 2
+#| out-width: 90%
+set.seed(18)
+km1 <- kmeans(df[,c("x", "y")], 2)
+df$clust1 <- factor(km1$cluster)
+km2 <- kmeans(df[,c("x", "y")], 2)
+df$clust2 <- factor(km2$cluster)
+ggplot(df, aes(x, y, color = clust1)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+ggplot(df, aes(x, y, color = clust2)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+```
+
+Or combined in one graph:
+
+```{r}
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+ggplot(df, aes(x, y, color = clust1)) +
+  geom_point(size = 4) +
+  geom_point(aes(color = clust2), pch = 21, size = 6, stroke = 1.5) +
+  geom_text(aes(label = label), color = "white") +
+  guides(color = "none") +
+  theme_classic()
+```
+
+The cluster comparison can be also expressed as a contingency table:
+
+```{r}
+table(km1$cluster, km2$cluster)
+```
+
+3 points are assigned to red in both clusterings {1, 2, 6}
+
+3 points are assigned to blue in both clusterings {4, 7, 9}
+
+2 points are assigned blue in the first and red in the second clustering {5, 8}
+
+1 point is assigned red in the first and blue in the second clustering {3}
+
+Now let's compare the clusterings using `classAgreement()`
+
+```{r}
+library(e1071)
+classAgreement(table(km1$cluster, km2$cluster))
+```
+
+`$diag` -- percentage of data points on the main diagonal 
+
+$\frac{3 + 3}{9} = .667$
+
+`$kappa` -- `$diag` corrected for agreement by chance
+
+by chance, the diagonal would be:
+
+$\frac{5}{9} \frac{4}{9} + \frac{4}{9} \frac{5}{9} = .494$
+
+(col1sum/all * row1sum/all + col2sum/all * row2sum/all)
+
+correction: 
+
+$\frac{.667 - .494}{1 - .494} = .34$
+
+`$rand` -- Rand index $\frac{A}{A + D}$
+
+where $A$ = pairs of points put in the *same* cluster by both partitions or pairs of points put in *different* clusters by both partitions
+
+and $D$ = pairs of points put in the *same* cluster by one partition and *different* clusters by the other partition
+
+$A + D$ = total number of pairs = $\left(\begin{array}{c} 9 \\ 2 \end{array}\right) = 36$
+
+$A$:
+
+*same* in both:
+
+pairs both in red: $\left(\begin{array}{c} 3 \\ 2 \end{array}\right) = 3$
+
+pairs both in blue: $\left(\begin{array}{c} 3 \\ 2 \end{array}\right) = 3$
+
+pairs in blue in 1st clustering and red in 2nd: $1$
+
+*different* in both:
+
+$3 \cdot 3$ (any pair of {1, 2, 6} and {4, 7, 9})
+
+$2 \cdot 1$ (any of pair {5, 8} and {3})
+
+Total: $3 + 3 + 1 + 9 + 2 = 18$
+
+$\frac{A}{A + D} = \frac{18}{36} = 0.5$
+
+## heatmap
+
+```{r}
+library(cluster)
+library(RColorBrewer)
+colors <- brewer.pal(3, "Reds")[3:1]
+heatmap(as.matrix(daisy(df[,c("clust1", "clust2")])),
+        scale = "none", col = colors, symm = TRUE)
+```
+
+The darkest squares on the main diagonal show the same clusters detailed above for $A$: pairs always in the same cluster or always in different clusters
+
+
+# Let's try with 100 clusterings
+
+```{r}
+kmclust <- function(n) {
+  km <- kmeans(df[,c("x", "y")], 2)
+  factor(km$cluster)  # very important so daisy uses gower instead of euclidean distance
+}
+
+n <- 1:100
+df2 <- map_dfc(n, kmclust) |> 
+  set_names(paste0("clust", n))
+
+colors <- brewer.pal(9, "Reds")[9:1]
+
+heatmap(as.matrix(daisy(df2)), scale = "none", symm = TRUE,
+        col = colors)
+```
+
+Tidyverse version:
+
+```{r}
+df2dist <- 1 - data.frame(as.matrix(daisy(df2)))
+
+levelorder <- names(sort(rowSums(df2dist)))
+
+
+df2plot <- df2dist |> 
+  rownames_to_column("id") |> 
+  pivot_longer(cols = -id, values_to = "similarity") |> 
+  mutate(name = factor(parse_number(name)),
+         id = factor(id))
+
+ggplot(df2plot, aes(fct_relevel(id, levelorder),
+                    fct_relevel(name, rev(levelorder)),
+                                fill = similarity)) +
+  geom_tile() +
+  scale_fill_distiller(palette = "Reds", direction = 1) +
+  theme_classic() +
+  coord_fixed() +
+  labs(x = NULL, y = NULL)
+
+```
+
+In both we see that points {5, 8} are more likely to be clustered with {1, 2, 6} than {4, 7, 9}.
+
+The same information is available in the similarity matrix:
+
+```{r}
+df2dist
+```
+
+A "1" indicates that the pair of points is always in the same cluster. A "0" indicates that the two points are never in the same cluster.
+
+## Need for matching
+
+Let's return to the case of two clusterings:
+```{r}
+#| layout-ncol: 2
+#| out-width: 90%
+set.seed(18)
+km1 <- kmeans(df[,c("x", "y")], 2)
+df$clust1 <- factor(km1$cluster)
+km2 <- kmeans(df[,c("x", "y")], 2)
+df$clust2 <- factor(km2$cluster)
+ggplot(df, aes(x, y, color = clust1)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+ggplot(df, aes(x, y, color = clust2)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+```
+
+We could visualize the clusterings by showing the most likely cluster and use alpha blending for the percentage of times in that cluster:
+
+```{r}
+partydata <- df |>
+  pivot_longer(cols = starts_with("clust")) |>
+  group_by(label, value) |>
+  summarize(classpercent = n()/2) |>
+  pivot_wider(names_from = value, values_from = classpercent,
+              names_prefix = "class", values_fill = 0)
+
+df <- left_join(df, partydata) |> 
+  mutate(topclass = factor(ifelse(class1 > class2, 1, 2))) |>
+  mutate(topclass = factor(ifelse(class1 == class2, "tie", topclass))) |> 
+  mutate(stab = ifelse(class1 > class2, class1, class2))
+
+ggplot(df, aes(x, y, color = topclass, alpha = stab)) +
+  geom_point(size = 4) +
+  theme_classic() + 
+  scale_alpha("stab", range = c(min(df$stab), max(df$stab)))
+```
+
+But what happens with this example?
+
+```{r}
+#| layout-ncol: 2
+#| out-width: 90%
+df <- read.csv("data/ninepts.csv")
+df$label <- rownames(df)
+set.seed(15)
+km1 <- kmeans(df[,c("x", "y")], 2)
+df$clust1 <- factor(km1$cluster)
+km2 <- kmeans(df[,c("x", "y")], 2)
+df$clust2 <- factor(km2$cluster)
+ggplot(df, aes(x, y, color = clust1)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+ggplot(df, aes(x, y, color = clust2, label = label)) +
+  geom_point(size = 5) +
+  guides(color = "none") +
+  theme_classic(16)
+```
+
+```{r}
+partydata <- df |>
+  pivot_longer(cols = starts_with("clust")) |>
+  group_by(label, value) |>
+  summarize(classpercent = n()/2) |>
+  pivot_wider(names_from = value, values_from = classpercent,
+              names_prefix = "class", values_fill = 0)
+
+df <- left_join(df, partydata) |> 
+  mutate(topclass = factor(ifelse(class1 > class2, 1, 2))) |>
+  mutate(topclass = factor(ifelse(class1 == class2, "tie", topclass))) |> 
+  mutate(stab = ifelse(class1 > class2, class1, class2))
+
+ggplot(df, aes(x, y, color = topclass, alpha = stab)) +
+  geom_point(size = 4) +
+  theme_classic() + 
+  scale_alpha("stab", range = c(min(df$stab)), max(df$stab))
+```
+
+We need a way to match clusters following our intuition that the two clusterings are identical, i.e. the choice of colors is arbitrary.
+
+`e1071::matchClasses()` address this issue:
+
+```{r}
+df$clust1
+df$clust2
+table(df$clust1, df$clust2)
+m <- matchClasses(table(df$clust1, df$clust2))
+m
+```
+
+Now we can adjust the second clustering based on this information:
+
+```{r}
+# use m as a lookup table
+df$clust2 <- factor(unname(m[df$clust2])) 
+df <- df |> select(x, y, label, clust1, clust2)
+```
+
+```{r}
+partydata <- df |>
+  pivot_longer(cols = starts_with("clust")) |>
+  group_by(label, value) |>
+  summarize(classpercent = n()/2) |>
+  pivot_wider(names_from = value, values_from = classpercent,
+              names_prefix = "class", values_fill = 0)
+
+df <- left_join(df, partydata) |> 
+  mutate(topclass = factor(ifelse(class1 > class2, 1, 2))) |>
+  mutate(topclass = factor(ifelse(class1 == class2, "tie", topclass))) |> 
+  mutate(stab = ifelse(class1 > class2, class1, class2))
+
+ggplot(df, aes(x, y, color = topclass, alpha = stab)) +
+  geom_point(size = 4) +
+  theme_classic() + 
+  scale_alpha("stab", range = c(min(df$stab)), max(df$stab))
+```
+

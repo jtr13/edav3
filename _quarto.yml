@@ -11,7 +11,9 @@ book:
   repo-actions: [source, edit, issue]
   chapters:
     - index.qmd
-    - clustering.qmd
+    - comparing_clusters.qmd
+    - stability.qmd
+    - stability_supporting_info.qmd
 
 format:
   html:
@@ -19,8 +21,8 @@ format:
     code-link: true
     highlight-style: style/joyce.theme
     callout-icon: false
-    fig-width: 4
-    fig-height: 3
+    fig-width: 5
+    fig-height: 5
 
 knitr:
   opts_chunk:
